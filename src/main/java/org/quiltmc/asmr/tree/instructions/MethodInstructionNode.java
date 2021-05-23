@@ -15,9 +15,9 @@ public class MethodInstructionNode extends InstructionNode {
     private final InterfaceNode itf = new InterfaceNode(this);
 
     private final List<AbstractNode<? extends AbstractInstructionNode, ?>> children = Collections.unmodifiableList(Arrays.asList(
-            opcode(),
             visibleAnnotations(),
             invisibleAnnotations(),
+            opcode(),
             owner,
             name,
             descriptor,

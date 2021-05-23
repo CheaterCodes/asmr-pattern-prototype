@@ -10,7 +10,9 @@ import java.util.List;
 public class LabelNode extends AbstractInstructionNode {
     private final IndexNode index = new IndexNode(this);
 
-    private final List<AbstractNode<? extends AbstractInstructionNode, ?>> children = Collections.singletonList(index);
+    private final List<AbstractNode<? extends AbstractInstructionNode, ?>> children = Collections.singletonList(
+            index
+    );
 
     protected LabelNode(MethodNode.InstructionListNode instructionListNode) {
         super(instructionListNode);
