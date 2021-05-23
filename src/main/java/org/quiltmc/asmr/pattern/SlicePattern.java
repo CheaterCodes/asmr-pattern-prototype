@@ -11,6 +11,13 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
     private List<Entry<N, E, NodePattern<N, E>>> after = Collections.emptyList();
     private List<Entry<N, E, NodePattern<N, E>>> before = Collections.emptyList();
 
+    private State state = State.Full;
+    private enum State {
+        ZeroStart,
+        ZeroEnd,
+        Full
+    }
+
     public SlicePattern(Class<? extends N> nodeClass) {
         super(nodeClass);
     }
@@ -25,6 +32,7 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
         super.copyFrom(pattern);
         this.after = new ArrayList<>(pattern.after);
         this.before = new ArrayList<>(pattern.before);
+        this.state = pattern.state;
     }
 
     /**
@@ -37,6 +45,9 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
      * @return A new {@link SlicePattern} ending at the specified {@link NodePattern}
      */
     public SlicePattern<P, N, E> before(NodePattern<N, E> child, boolean inclusive) {
+        if (state != State.Full) {
+            throw new IllegalStateException("Can't add further constraints to zero-length slice");
+        }
         SlicePattern<P, N, E> newPattern = newInstance();
         newPattern.copyFrom(getThis());
         newPattern.before.add(new Entry<>(child, inclusive));
@@ -53,9 +64,40 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
      * @return A new {@link SlicePattern} starting at the specified {@link NodePattern}
      */
     public SlicePattern<P, N, E> after(NodePattern<N, E> child, boolean inclusive) {
+        if (state != State.Full) {
+            throw new IllegalStateException("Can't add further constraints to zero-length slice");
+        }
         SlicePattern<P, N, E> newPattern = newInstance();
         newPattern.copyFrom(getThis());
         newPattern.after.add(new Entry<>(child, inclusive));
+        return newPattern;
+    }
+
+    /**
+     * Creates a zero-length slice at the start of this slice.
+     * @return A zero-length slice
+     */
+    public SlicePattern<P, N, E> start() {
+        if (state != State.Full) {
+            throw new IllegalStateException("Can't add further constraints to zero-length slice");
+        }
+        SlicePattern<P, N, E> newPattern = newInstance();
+        newPattern.copyFrom(getThis());
+        newPattern.state = State.ZeroStart;
+        return newPattern;
+    }
+
+    /**
+     * Creates a zero-length slice at the end of this slice.
+     * @return A zero-length slice
+     */
+    public SlicePattern<P, N, E> end() {
+        if (state != State.Full) {
+            throw new IllegalStateException("Can't add further constraints to zero-length slice");
+        }
+        SlicePattern<P, N, E> newPattern = newInstance();
+        newPattern.copyFrom(getThis());
+        newPattern.state = State.ZeroEnd;
         return newPattern;
     }
 
