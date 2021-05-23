@@ -10,6 +10,8 @@ import org.quiltmc.asmr.tree.ClassNode;
 import org.quiltmc.asmr.tree.MethodNode;
 import org.quiltmc.asmr.tree.VoidNode;
 import org.quiltmc.asmr.tree.instructions.AbstractInstructionNode;
+import org.quiltmc.asmr.tree.instructions.InstructionNode;
+import org.quiltmc.asmr.tree.instructions.MethodInstructionNode;
 import org.quiltmc.asmr.tree.instructions.NoOperandInstructionNode;
 
 public class BasicPatternTests {
@@ -54,26 +56,43 @@ public class BasicPatternTests {
 
     @Test
     public void instructionNodePattern() {
-        ValuePattern<AbstractInstructionNode, AbstractInstructionNode.OpcodeNode, Integer> opcodePattern =
-                new ValuePattern<>(AbstractInstructionNode.OpcodeNode.class)
+        ValuePattern<InstructionNode, InstructionNode.OpcodeNode, Integer> opcodePattern =
+                new ValuePattern<>(InstructionNode.OpcodeNode.class)
                         .match(Matcher.any(Matcher.exact(Opcodes.RETURN), Matcher.exact(Opcodes.ARETURN)));
 
-        NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> pattern =
-                new NodePattern<>(NoOperandInstructionNode.class).child(opcodePattern);
+        NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> instructionPattern =
+                new NodePattern<>(NoOperandInstructionNode.class)
+                        .child(opcodePattern);
+    }
+
+    @Test
+    public void methodInstructionNodePattern() {
+        ValuePattern<InstructionNode, InstructionNode.OpcodeNode, Integer> opcodePattern =
+                new ValuePattern<>(InstructionNode.OpcodeNode.class)
+                        .match(Matcher.exact(Opcodes.INVOKEVIRTUAL));
+
+        ValuePattern<MethodInstructionNode, MethodInstructionNode.NameNode, String> namePattern =
+                new ValuePattern<>(MethodInstructionNode.NameNode.class)
+                        .match(Matcher.exact("targetMethod"));
+
+        NodePattern<MethodNode.InstructionListNode, MethodInstructionNode> instructionPattern =
+                new NodePattern<>(MethodInstructionNode.class)
+                        .child(opcodePattern)
+                        .child(namePattern);
     }
 
     @Test
     public void instructionSlicePattern() {
-        ValuePattern<AbstractInstructionNode, AbstractInstructionNode.OpcodeNode, Integer> startOpcodePattern =
-                new ValuePattern<>(AbstractInstructionNode.OpcodeNode.class)
+        ValuePattern<InstructionNode, InstructionNode.OpcodeNode, Integer> startOpcodePattern =
+                new ValuePattern<>(InstructionNode.OpcodeNode.class)
                         .match(Matcher.exact(Opcodes.ALOAD));
 
         NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> startPattern =
                 new NodePattern<>(NoOperandInstructionNode.class).child(startOpcodePattern);
 
 
-        ValuePattern<AbstractInstructionNode, AbstractInstructionNode.OpcodeNode, Integer> endOpcodePattern =
-                new ValuePattern<>(AbstractInstructionNode.OpcodeNode.class)
+        ValuePattern<InstructionNode, InstructionNode.OpcodeNode, Integer> endOpcodePattern =
+                new ValuePattern<>(InstructionNode.OpcodeNode.class)
                         .match(Matcher.exact(Opcodes.ASTORE));
 
         NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> endPattern =

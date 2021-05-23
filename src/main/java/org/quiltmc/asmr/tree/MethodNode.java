@@ -3,6 +3,7 @@ package org.quiltmc.asmr.tree;
 import org.quiltmc.asmr.tree.annotations.AnnotationNode;
 import org.quiltmc.asmr.tree.annotations.TypeAnnotationNode;
 import org.quiltmc.asmr.tree.instructions.AbstractInstructionNode;
+import org.quiltmc.asmr.tree.instructions.InstructionNode;
 
 import java.util.Arrays;
 import java.util.Collections;

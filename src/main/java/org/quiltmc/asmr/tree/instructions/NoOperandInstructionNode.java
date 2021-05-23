@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class NoOperandInstructionNode extends AbstractInstructionNode {
-    private final List<AbstractNode<? extends AbstractInstructionNode, ?>> children = Collections.unmodifiableList(Arrays.<AbstractNode<? extends AbstractInstructionNode, ?>>asList(
+public class NoOperandInstructionNode extends InstructionNode {
+    private final List<AbstractNode<? extends AbstractInstructionNode, ?>> children = Collections.unmodifiableList(Arrays.asList(
             opcode(),
             visibleAnnotations(),
             invisibleAnnotations()
