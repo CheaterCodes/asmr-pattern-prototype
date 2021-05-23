@@ -8,6 +8,7 @@ import org.quiltmc.asmr.pattern.SlicePattern;
 import org.quiltmc.asmr.pattern.ValuePattern;
 import org.quiltmc.asmr.tree.ClassNode;
 import org.quiltmc.asmr.tree.MethodNode;
+import org.quiltmc.asmr.tree.VoidNode;
 import org.quiltmc.asmr.tree.instructions.AbstractInstructionNode;
 import org.quiltmc.asmr.tree.instructions.NoOperandInstructionNode;
 
@@ -18,7 +19,7 @@ public class BasicPatternTests {
                 new ValuePattern<>(ClassNode.NameNode.class)
                         .match(Matcher.exact("/pkg/ClassName"));
 
-        NodePattern<Void, ClassNode> classPattern =
+        NodePattern<VoidNode, ClassNode> classPattern =
                 new NodePattern<>(ClassNode.class)
                         .child(classNamePattern);
     }
@@ -29,7 +30,7 @@ public class BasicPatternTests {
                 new ValuePattern<>(ClassNode.NameNode.class)
                         .match(Matcher.exact("/pkg/ClassName"));
 
-        NodePattern<Void, ClassNode> classPattern =
+        NodePattern<VoidNode, ClassNode> classPattern =
                 new NodePattern<>(ClassNode.class)
                         .child(classNamePattern);
 
@@ -57,7 +58,7 @@ public class BasicPatternTests {
                 new ValuePattern<>(AbstractInstructionNode.OpcodeNode.class)
                         .match(Matcher.any(Matcher.exact(Opcodes.RETURN), Matcher.exact(Opcodes.ARETURN)));
 
-        NodePattern<MethodNode.InstructionListNode, AbstractInstructionNode> pattern =
+        NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> pattern =
                 new NodePattern<>(NoOperandInstructionNode.class).child(opcodePattern);
     }
 
@@ -67,7 +68,7 @@ public class BasicPatternTests {
                 new ValuePattern<>(AbstractInstructionNode.OpcodeNode.class)
                         .match(Matcher.exact(Opcodes.ALOAD));
 
-        NodePattern<MethodNode.InstructionListNode, AbstractInstructionNode> startPattern =
+        NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> startPattern =
                 new NodePattern<>(NoOperandInstructionNode.class).child(startOpcodePattern);
 
 
@@ -75,7 +76,7 @@ public class BasicPatternTests {
                 new ValuePattern<>(AbstractInstructionNode.OpcodeNode.class)
                         .match(Matcher.exact(Opcodes.ASTORE));
 
-        NodePattern<MethodNode.InstructionListNode, AbstractInstructionNode> endPattern =
+        NodePattern<MethodNode.InstructionListNode, NoOperandInstructionNode> endPattern =
                 new NodePattern<>(NoOperandInstructionNode.class).child(endOpcodePattern);
 
         SlicePattern<MethodNode, MethodNode.InstructionListNode, AbstractInstructionNode> slicePattern =

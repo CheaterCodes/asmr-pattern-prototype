@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ClassNode extends AbstractNode<Void, ClassNode> {
+public class ClassNode extends AbstractNode<VoidNode, ClassNode> {
     private final VersionNode version = new VersionNode(this);
     private final ModifierListNode modifiers = new ModifierListNode(this);
     private final NameNode name = new NameNode(this);

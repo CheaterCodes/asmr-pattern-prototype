@@ -1,13 +1,14 @@
 package org.quiltmc.asmr.pattern;
 
 import org.quiltmc.asmr.match.Matcher;
+import org.quiltmc.asmr.tree.AbstractNode;
 import org.quiltmc.asmr.tree.AbstractValueNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ValuePattern<P, N extends AbstractValueNode<P, ? extends N, T>, T> extends AbstractPattern<P, N, ValuePattern<P, N, T>> {
+public class ValuePattern<P extends AbstractNode<?, ? super P>, N extends AbstractValueNode<P, ? super N, T>, T> extends AbstractPattern<P, N, ValuePattern<P, N, T>> {
     private List<Matcher<T>> matchers = Collections.emptyList();
 
     public ValuePattern(Class<? extends N> nodeClass) {

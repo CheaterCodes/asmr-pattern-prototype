@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E extends AbstractNode<N, E>> extends AbstractPattern<P, N, SlicePattern<P, N, E>> {
-    private List<Entry<N, E, NodePattern<N, E>>> after = Collections.emptyList();
-    private List<Entry<N, E, NodePattern<N, E>>> before = Collections.emptyList();
+public class SlicePattern<P extends AbstractNode<?, ? super P>, N extends AbstractListNode<? super P, ? super N, ? super E>, E extends AbstractNode<? super N, ? super E>> extends AbstractPattern<P, N, SlicePattern<P, N, E>> {
+    private List<Entry<NodePattern<? super N, ? extends E>>> after = Collections.emptyList();
+    private List<Entry<NodePattern<? super N, ? extends E>>> before = Collections.emptyList();
 
     private State state = State.Full;
     private enum State {
@@ -44,7 +44,7 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
      * @param inclusive Whether the specified matched node should be part of the new slice or not
      * @return A new {@link SlicePattern} ending at the specified {@link NodePattern}
      */
-    public SlicePattern<P, N, E> before(NodePattern<N, E> child, boolean inclusive) {
+    public SlicePattern<P, N, E> before(NodePattern<? super N, ? extends E> child, boolean inclusive) {
         if (state != State.Full) {
             throw new IllegalStateException("Can't add further constraints to zero-length slice");
         }
@@ -63,7 +63,7 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
      * @param inclusive Whether the specified matched node should be part of the new slice or not
      * @return A new {@link SlicePattern} starting at the specified {@link NodePattern}
      */
-    public SlicePattern<P, N, E> after(NodePattern<N, E> child, boolean inclusive) {
+    public SlicePattern<P, N, E> after(NodePattern<? super N, ? extends E> child, boolean inclusive) {
         if (state != State.Full) {
             throw new IllegalStateException("Can't add further constraints to zero-length slice");
         }
@@ -101,7 +101,7 @@ public class SlicePattern<P, N extends AbstractListNode<P, ? extends N, E>, E ex
         return newPattern;
     }
 
-    private static class Entry<P, N extends AbstractNode<P, N>, T extends NodePattern<P, N>> {
+    private static class Entry<T extends NodePattern<?, ?>> {
         private final T pattern;
         private final boolean inclusive;
 

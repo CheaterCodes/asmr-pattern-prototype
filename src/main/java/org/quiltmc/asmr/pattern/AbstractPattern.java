@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractPattern<P, N extends AbstractNode<P, ? extends N>, SELF extends AbstractPattern<P, N, SELF>> {
+public abstract class AbstractPattern<P extends AbstractNode<?, ? super P>, N extends AbstractNode<? super P, ? super N>, SELF extends AbstractPattern<P, N, SELF>> {
     protected final Class<? extends N> nodeClass;
 
     protected AbstractPattern<?, ?, ?> parent;
-    protected List<AbstractPattern<? extends N, ?, ?>> children = Collections.emptyList();
+    protected List<AbstractPattern<? super N, ?, ?>> children = Collections.emptyList();
 
     public AbstractPattern(Class<? extends N> nodeClass) {
         this.nodeClass = nodeClass;
@@ -28,7 +28,7 @@ public abstract class AbstractPattern<P, N extends AbstractNode<P, ? extends N>,
         this.children = new ArrayList<>(pattern.children);
     }
 
-    public <PP, PN extends AbstractNode<PP, PN>> SELF parent(AbstractPattern<PP , PN, ?> parentPattern) {
+    public SELF parent(AbstractPattern<?, ? super P, ?> parentPattern) {
         if (parent != null) {
             throw new IllegalStateException("Pattern already has a parent!");
         }
@@ -39,7 +39,7 @@ public abstract class AbstractPattern<P, N extends AbstractNode<P, ? extends N>,
         return newPattern;
     }
 
-    public SELF child(AbstractPattern<? extends N, ?, ?> childPattern) {
+    public SELF child(AbstractPattern<? super N, ?, ?> childPattern) {
         SELF newPattern = newInstance();
         newPattern.copyFrom(getThis());
         newPattern.children.add(childPattern);
