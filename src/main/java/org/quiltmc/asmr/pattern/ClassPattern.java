@@ -1,25 +1,26 @@
 package org.quiltmc.asmr.pattern;
 
-import org.quiltmc.asmr.tree.member.AsmrClassNode;
+public class ClassPattern extends Pattern<ClassPattern> {
+    public static final ClassPattern ALL = new ClassPattern(null);
 
-public class ClassPattern extends Pattern<AsmrClassNode> {
-    private ValuePattern<String> name = new ValuePattern<>("name");
-    private ValuePattern<String> superclass = new ValuePattern<>("superclass");
+    protected ClassPattern(Pattern<?> parent) {
+        super(parent);
+    }
 
-    private SlicePattern<MethodPattern> methods = new SlicePattern<>(MethodPattern::new);
-
-    public ClassPattern() {
+    @Override
+    protected ClassPattern create(Pattern<?> parent) {
+        return new ClassPattern(parent);
     }
 
     public ValuePattern<String> name() {
-        return name;
+        return new ValuePattern<>("name", this);
     }
 
     public ValuePattern<String> superclass() {
-        return superclass;
+        return new ValuePattern<>("superclass", this);
     }
 
-    public SlicePattern<MethodPattern> methods() {
-        return methods;
+    public MethodPattern methods() {
+        return new MethodPattern(this);
     }
 }

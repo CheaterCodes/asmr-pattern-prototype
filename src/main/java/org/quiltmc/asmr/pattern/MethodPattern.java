@@ -1,14 +1,20 @@
 package org.quiltmc.asmr.pattern;
 
-import org.quiltmc.asmr.tree.member.AsmrMethodNode;
+public class MethodPattern extends SliceEntryPattern<MethodPattern> {
+    protected MethodPattern(Pattern<?> parent) {
+        super(parent);
+    }
 
-public class MethodPattern extends Pattern<AsmrMethodNode> {
-    private ValuePattern<String> name = new ValuePattern<>("name");
-
-    protected MethodPattern() {
+    @Override
+    protected MethodPattern create(Pattern<?> parent) {
+        return new MethodPattern(parent);
     }
 
     public ValuePattern<String> name() {
-        return name;
+        return new ValuePattern<>("name", this);
+    }
+
+    public MethodBodyPattern body() {
+        return new MethodBodyPattern(this);
     }
 }

@@ -1,51 +1,25 @@
 package org.quiltmc.asmr.pattern;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
-public class SlicePattern<T extends Pattern<?>> {
-    private final T first;
-    private final T last;
-    private final T all;
+public class SlicePattern<T extends SliceEntryPattern<T>> extends Pattern<SlicePattern<T>> {
+    private final Function<SlicePattern<T>, T> childFactory;
+    private final Pattern<?> startPattern;
+    private final Pattern<?> endPattern;
 
-    protected SlicePattern(Supplier<T> anySupplier) {
-        first = anySupplier.get();
-        last = anySupplier.get();
-        all = anySupplier.get();
+    protected SlicePattern(Pattern<?> parent, Pattern<?> startPattern, Pattern<?> endPattern, Function<SlicePattern<T>, T> childFactory) {
+        super(parent);
+        this.startPattern = startPattern;
+        this.endPattern = endPattern;
+        this.childFactory = childFactory;
     }
 
-    /**
-     * Returns the pattern that restricts this slice's first element.
-     * This pattern can also be used to match the first element of this slice.
-     * @return The pattern representing the first element of this slice
-     */
-    public T first() {
-        return first;
+    public final T entries() {
+        return childFactory.apply(this);
     }
 
-    /**
-     * Returns the pattern that restricts this slice's last element.
-     * This pattern can also be used to match the last element of this slice.
-     * @return The pattern representing the last element of this slice
-     */
-    public T last() {
-        return last;
-    }
-
-    /**
-     * Returns the pattern that restricts all elements of this slice.
-     * This pattern can also be used to match all elements of this slice.
-     * @return The pattern representing all elements of this slice
-     */
-    public T all() {
-        return all;
-    }
-
-    /**
-     * Returns a new slice pattern that must be contained in this slice.
-     * This pattern can also be used to match all slice patterns of this slice.
-     * @return The slice pattern that must be contained in this slice
-     */
-    public SlicePattern<T> slice() {
-
+    @Override
+    protected SlicePattern<T> create(Pattern<?> parent) {
+        throw new UnsupportedOperationException("Can't create SlicePattern as child");
     }
 }
