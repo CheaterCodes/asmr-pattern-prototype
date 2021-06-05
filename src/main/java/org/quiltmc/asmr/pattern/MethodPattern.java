@@ -1,12 +1,12 @@
 package org.quiltmc.asmr.pattern;
 
 public class MethodPattern extends SliceEntryPattern<MethodPattern> {
-    protected MethodPattern(Pattern<?> parent) {
+    protected MethodPattern(AbstractPattern<?> parent) {
         super(parent);
     }
 
     @Override
-    protected MethodPattern create(Pattern<?> parent) {
+    protected MethodPattern create(AbstractPattern<?> parent) {
         return new MethodPattern(parent);
     }
 
@@ -16,5 +16,9 @@ public class MethodPattern extends SliceEntryPattern<MethodPattern> {
 
     public MethodBodyPattern body() {
         return new MethodBodyPattern(this);
+    }
+
+    public AbstractInstructionPattern<?> instructions() {
+        return this.body().instructions();
     }
 }

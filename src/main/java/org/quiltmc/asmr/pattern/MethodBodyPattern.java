@@ -1,12 +1,12 @@
 package org.quiltmc.asmr.pattern;
 
-public class MethodBodyPattern extends Pattern<MethodBodyPattern> {
-    protected MethodBodyPattern(Pattern<?> parent) {
+public class MethodBodyPattern extends AbstractPattern<MethodBodyPattern> {
+    protected MethodBodyPattern(AbstractPattern<?> parent) {
         super(parent);
     }
 
     @Override
-    protected MethodBodyPattern create(Pattern<?> parent) {
+    protected MethodBodyPattern create(AbstractPattern<?> parent) {
         return new MethodBodyPattern(parent);
     }
 

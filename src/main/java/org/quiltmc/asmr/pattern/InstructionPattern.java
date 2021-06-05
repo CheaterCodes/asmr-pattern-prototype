@@ -1,12 +1,17 @@
 package org.quiltmc.asmr.pattern;
 
 public class InstructionPattern<SELF extends InstructionPattern<SELF>> extends AbstractInstructionPattern<SELF> {
-    protected InstructionPattern(Pattern<?> parent) {
+    static {
+        //noinspection unchecked
+        register(InstructionPattern.class, InstructionPattern::new);
+    }
+
+    protected InstructionPattern(AbstractPattern<?> parent) {
         super(parent);
     }
 
     @Override
-    protected SELF create(Pattern<?> parent) {
+    protected SELF create(AbstractPattern<?> parent) {
         return new InstructionPattern<SELF>(parent).getThis();
     }
 

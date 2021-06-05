@@ -1,12 +1,15 @@
 package org.quiltmc.asmr.pattern;
 
 public class MethodInstructionPattern extends InstructionPattern<MethodInstructionPattern> {
-    protected MethodInstructionPattern(Pattern<?> parent) {
+    static {
+        register(MethodInstructionPattern.class, MethodInstructionPattern::new);
+    }
+    protected MethodInstructionPattern(AbstractPattern<?> parent) {
         super(parent);
     }
 
     @Override
-    protected MethodInstructionPattern create(Pattern<?> parent) {
+    protected MethodInstructionPattern create(AbstractPattern<?> parent) {
         return new MethodInstructionPattern(parent);
     }
 
